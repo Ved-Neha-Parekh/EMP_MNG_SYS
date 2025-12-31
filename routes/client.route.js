@@ -11,10 +11,15 @@ clientRouter.post("/login",clientController.handelLogin);
 
 clientRouter.get("/",requireAuth,clientController.viewDashboard);
 
-// clientRouter.get("/add-employee",clientController.addEmployeePage);
+clientRouter.get("/add-employee",clientController.addEmployeePage);
+clientRouter.post("/add-employee", requireAuth,clientController.handleAddEmployee);
 clientRouter.get("/view-employees",requireAuth,clientController.renderViewEmployees);
 
 clientRouter.get("/delete-employee/:id",clientController.deleteEmployee);
+
+clientRouter.get("/edit-employee/:id", clientController.renderEditPage);
+
+clientRouter.post("/edit-employee/:id", requireAuth, clientController.handleUpdateEmployee);
 
 clientRouter.get("/logout", clientController.logout);
 export default clientRouter;

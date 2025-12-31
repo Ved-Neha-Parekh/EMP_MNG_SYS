@@ -59,6 +59,29 @@ export const clientController = {
     return res.render("../views/pages/add-employee.ejs");
   },
 
+  async handleAddEmployee(req, res) {
+    try {
+      const userData = req.body;
+
+      const token = req.cookies.token;
+
+      // 3. Backend API Call
+      await api.post("/add-employee", userData, {
+        headers: {
+          Cookie: `token=${token}` 
+        }
+      });
+
+      console.log("Employee Added Successfully!");
+      return res.redirect("/view-employees");
+
+    } catch (error) {
+      console.log("Add Employee Error:", error.message);
+
+      return res.redirect("/add-employee");
+    }
+  },
+
   async renderViewEmployees(req, res) {
     try {
       const token = req.cookies.token;
@@ -96,6 +119,48 @@ export const clientController = {
         return res.redirect("/view-employees");
     }
   },
+
+  async renderEditPage(req, res) {
+    try {
+      const { id } = req.params;
+      const token = req.cookies.token;
+
+      const response = await api.get(`/employee/${id}`, {
+        headers: { Cookie: `token=${token}` }
+      });
+
+      if (response.data.success) {
+        return res.render("../views/pages/edit-employee.ejs", {
+          user: response.data.user,
+          error: null
+        });
+      } else {
+        return res.redirect("/view-employees");
+      }
+
+    } catch (error) {
+      console.log("Render Edit Page Error:", error.message);
+      return res.redirect("/view-employees");
+    }
+  },
+
+  async handleUpdateEmployee(req, res) {
+    try {
+      const { id } = req.params;
+      const userData = req.body;
+      const token = req.cookies.token;
+
+      await api.put(`/update-employee/${id}`, userData, {
+        headers: { Cookie: `token=${token}` }
+      });
+
+      return res.redirect("/view-employees");
+
+    } catch (error) {
+      console.log("Update Error:", error.message);
+      return res.redirect(`/edit-employee/${req.params.id}`);
+    }
+  }
 };
 
 

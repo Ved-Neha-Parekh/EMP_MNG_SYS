@@ -6,13 +6,25 @@ const userRouter = Router();
 
 userRouter.post("/register", userController.registerUser);
 userRouter.post("/login", userController.loginUser);
+userRouter.post(
+  "/add-employee",
+  isAuthenticated,
+  authorizedRoles("admin", "manager"),
+  userController.registerUser
+);
 userRouter.get("/employees", userController.employees);
-userRouter.delete("/delete-employee/:id",isAuthenticated,userController.deleteUser);
-// userRouter.post(
-//   "/add-employee",
-//   isAuthenticated,
-//   authorizedRoles("admin", "manager"),
-//   userController.registerUser
-// );
+userRouter.delete(
+  "/delete-employee/:id",
+  isAuthenticated,
+  authorizedRoles("admin", "manager"),
+  userController.deleteUser
+);
+userRouter.get("/employee/:id", isAuthenticated, userController.getSingleUser);
+userRouter.put(
+  "/update-employee/:id",
+  authorizedRoles("admin", "manager"),
+  isAuthenticated,
+  userController.updateUser
+);
 
 export default userRouter;

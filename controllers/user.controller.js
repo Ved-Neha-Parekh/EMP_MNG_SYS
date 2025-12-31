@@ -86,6 +86,7 @@ export const userController = {
           name: user.name,
           role: user.role,
         },
+
       });
     } catch (error) {
       console.log("Error in login function:", error.message);
@@ -99,6 +100,7 @@ export const userController = {
         message: "All User Fetched",
         success: true,
         users: data,
+        currentUser: req.user,
       });
     } catch (error) {
       console.log("FETCH USER ERROR:", error.message);
@@ -143,6 +145,20 @@ export const userController = {
         success: false,
         updatedUser: {},
       });
+    }
+  },
+  async getSingleUser(req, res) {
+    try {
+      const { id } = req.params;
+      console.log(id);
+      let user = await User.findById(id);
+      return res.json({
+        message: "Single user fetched",
+        success: true,
+        user: user,
+      });
+    } catch (error) {
+      return res.json({ message: error.message, success: false, user: {} });
     }
   },
 };

@@ -50,43 +50,46 @@
                       <th scope="col">Email</th>
                       <th scope="col">Role</th>
                       <th scope="col">Department</th>
-                      <th scope="col">Action</th>
+                        <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <% if (locals.users && users.length> 0) { %>
-                  
-                      <% users.forEach((emp, index)=> { %>
+                    <% if (users && users.length> 0) { %>
+                      <% users.forEach((user, index)=> { %>
                         <tr>
                           <td>
                             <%= index + 1 %>
                           </td>
                   
                           <td>
-                            <h5 class="m-b-0">
-                              <%= emp.name %>
-                            </h5>
+                            <%= user.name %>
+                          </td>
+                          <td>
+                            <%= user.email %>
                           </td>
                   
                           <td>
-                            <%= emp.email %>
-                          </td>
-                  
-                          <td>
-                            <% if(emp.role==='admin' ) { %>
+                            <% if (user.role==='admin' ) { %>
                               <span class="badge bg-primary">Admin</span>
-                              <% } else { %>
-                                <span class="badge bg-cyan">User</span>
-                                <% } %>
+                              <% } else if (user.role==='manager' ) { %>
+                                <span class="badge bg-warning text-dark">Manager</span>
+                                <% } else { %>
+                                  <span class="badge bg-cyan">Employee</span>
+                                  <% } %>
                           </td>
                   
                           <td class="text-uppercase">
-                            <%= emp.department || 'N/A' %>
+                            <%= user.department || 'N/A' %>
                           </td>
-                          <td>
-                            <a href="/edit-employee/<%= emp._id %>" class="btn btn-cyan btn-sm">Edit</a>
-                            <a href="/delete-employee/<%= emp._id %>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
-                          </td>
+                  
+                            <td>
+                              <a href="/edit-employee/<%= user._id %>" class="btn btn-cyan btn-sm">Edit</a>
+                              <a href="/delete-employee/<%= user._id %>" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Are you sure?')">
+                                Delete
+                              </a>
+                            </td>
+                  
                         </tr>
                         <% }) %>
                           <% } else { %>
@@ -95,6 +98,7 @@
                             </tr>
                             <% } %>
                   </tbody>
+
                 </table>
               </div>
             </div>
