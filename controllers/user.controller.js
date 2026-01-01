@@ -6,7 +6,7 @@ import env from "../config/dotenv.js";
 export const userController = {
   async registerUser(req, res) {
     try {
-      const { name, email, password, salary, role, department } = req.body;
+      const { email, password } = req.body;
 
       let existingUser = await User.findOne({ email });
 
@@ -19,12 +19,8 @@ export const userController = {
       const hashPassword = await bcrypt.hash(password, 10);
 
       const newUser = new User({
-        name: name,
         email: email,
         password: hashPassword,
-        salary: salary,
-        role: role,
-        department: department,
       });
 
       await newUser.save();
@@ -33,10 +29,7 @@ export const userController = {
         message: "User created successfully...",
         success: true,
         user: {
-          name: newUser.name,
           email: newUser.email,
-          department: newUser.department,
-          role: newUser.role,
         },
       });
     } catch (error) {
